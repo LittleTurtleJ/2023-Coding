@@ -4,17 +4,17 @@
 
 package frc.robot.commands;
 
+import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.OI;
-import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Gyro;
 
-public class MoveArm extends CommandBase {
-  double speed;
+public class UseGyro extends CommandBase {
+  AHRS gyro;
 
-  /** Creates a new MoveArm. */
-  public MoveArm(Arm subsystem, double speedd) {
-    addRequirements(subsystem);
-    speed = speedd;
+  /** Creates a new UseGyro. */
+  public UseGyro() {
+    gyro = Gyro.getInstance().getGyro();
   }
 
   // Called when the command is initially scheduled.
@@ -24,14 +24,12 @@ public class MoveArm extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Arm.getInstance().moveArm(speed);
+    Gyro.getInstance().printAll();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    Arm.getInstance().moveArm(0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

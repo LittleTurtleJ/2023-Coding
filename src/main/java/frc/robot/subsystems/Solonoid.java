@@ -10,16 +10,17 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Solonoid extends SubsystemBase {
   private static Solonoid instance;
-  Compress comp = Compress.getInstance();
-  DoubleSolenoid solenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 1, 0);
-  Compressor compress = Compress.getInstance().getCompress();
+  DoubleSolenoid solenoidL = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.Claw.L_FWD_PORT, Constants.Claw.L_BWD_PORT);
+  DoubleSolenoid solenoidR = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.Claw.R_FWD_PORT, Constants.Claw.R_BWD_PORT);
 
   /** Creates a new Solonoid. */
   public Solonoid() {
-    solenoid.set(Value.kReverse);
+    solenoidL.set(Value.kReverse);
+    solenoidR.set(Value.kReverse);
   }
 
   @Override
@@ -27,22 +28,19 @@ public class Solonoid extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void forward() {
-    // comp.turnOff();
-    solenoid.set(Value.kForward);
-    SmartDashboard.putBoolean("forward", solenoid.isFwdSolenoidDisabled());
-    // comp.turnOn();
-  }
-
-  public void backward() {
-    // comp.turnOff();
-    solenoid.set(Value.kReverse);
-    SmartDashboard.putBoolean("backward", solenoid.isRevSolenoidDisabled());
-    // comp.turnOn();
+  public void change() {
+    solenoidL.set(solenoidL.get() == Value.kForward ? Value.kReverse : Value.kForward);
+    solenoidR.set(solenoidL.get() == Value.kForward ? Value.kReverse : Value.kForward);
   }
 
   public static Solonoid getInstance() {
     if (instance == null) instance = new Solonoid();
     return instance;
+  }
+
+  public void backward() {
+
+    solenoidL.set(solenoidL.get() == Value.kForward ? Value.kReverse : Value.kForward);
+
   }
 }

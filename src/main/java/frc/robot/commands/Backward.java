@@ -21,6 +21,7 @@ public class Backward extends CommandBase {
   @Override
   public void execute() {
     Solonoid.getInstance().backward();
+    
   }
 
   // Called once the command ends or is interrupted.

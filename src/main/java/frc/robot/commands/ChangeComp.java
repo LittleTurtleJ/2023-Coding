@@ -5,17 +5,11 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.OI;
-import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Compress;
 
-public class MoveArm extends CommandBase {
-  double speed;
-
-  /** Creates a new MoveArm. */
-  public MoveArm(Arm subsystem, double speedd) {
-    addRequirements(subsystem);
-    speed = speedd;
-  }
+public class ChangeComp extends CommandBase {
+  /** Creates a new ChangeComp. */
+  public ChangeComp() {}
 
   // Called when the command is initially scheduled.
   @Override
@@ -24,18 +18,16 @@ public class MoveArm extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Arm.getInstance().moveArm(speed);
+    Compress.getInstance().change(Compress.getInstance().getCompOn() ? false : true);;
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    Arm.getInstance().moveArm(0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

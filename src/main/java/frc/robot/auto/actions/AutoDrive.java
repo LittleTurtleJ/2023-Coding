@@ -2,38 +2,44 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.auto.actions;
 
-import frc.robot.subsystems.DriveTrain;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.OI;
-
-/** An example command that uses an example subsystem. */
-public class Drive extends CommandBase {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
+import frc.robot.subsystems.DriveTrain;
 
 
-  /**
-   * Creates a new ExampleCommand.
-   *
-   * @param subsystem The subsystem used by this command.
-   */
-  public Drive(DriveTrain driveTrain) {
-    
+public class AutoDrive extends CommandBase {
+  /** Creates a new SidePosition. */
+
+  private DriveTrain rightLeader;
+
+  public AutoDrive(double speed) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(DriveTrain.getInstance());
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+
+    SmartDashboard.putBoolean(getName(), isFinished());
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double throttle = OI.getInstance().getThrottleAxis();
-    double turn = OI.getInstance().getTurnAxis();
-    DriveTrain.getInstance().arcadeDrive(throttle, turn);
+
+    double position = DriveTrain.getInstance().getRLeader().getSelectedSensorPosition();
+
+    if(position < 15000){
+      // DriveTrain.arcadeDrive(.5, .5);
+
+    }else{
+      // DriveTrain.arcadeDrive(0, 0);
+    }
+
   }
 
   // Called once the command ends or is interrupted.
@@ -44,5 +50,6 @@ public class Drive extends CommandBase {
   @Override
   public boolean isFinished() {
     return false;
+    
   }
 }

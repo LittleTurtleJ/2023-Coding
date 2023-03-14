@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Compress extends SubsystemBase {
   private static Compress singleton;
 
-  Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
+  private Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
 
   /** Creates a new Compressor. */
   public Compress() {}
@@ -22,20 +22,22 @@ public class Compress extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void turnOn() {
-    compressor.enableDigital();
-    SmartDashboard.putBoolean("Running", compressor.isEnabled());
-    SmartDashboard.putBoolean("On", true);
-  }
-
-  public void turnOff() {
-    compressor.disable();
-    SmartDashboard.putBoolean("Running", compressor.isEnabled());
-    SmartDashboard.putBoolean("On", false);
+  public void change(boolean enable) {
+    if (enable) {
+      compressor.enableDigital();
+      SmartDashboard.putBoolean("CompOn", true);
+    } else {
+      compressor.disable();
+      SmartDashboard.putBoolean("CompOn", false);
+    }
   }
 
   public Compressor getCompress() {
     return compressor;
+  }
+
+  public boolean getCompOn() {
+    return compressor.isEnabled();
   }
 
   public static Compress getInstance() {

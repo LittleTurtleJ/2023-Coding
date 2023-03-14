@@ -4,15 +4,12 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.*;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-// Command for turning on the compressor(Pnematics related)
-public class DoCompress extends CommandBase {
-  /** Creates a new DoCompress. */
-  public DoCompress() {
-    // Use addRequirements() here to declare subsystem dependencies.
-  }
+import frc.robot.subsystems.Solonoid;
+
+public class ChangeSol extends CommandBase {
+  /** Creates a new ChangeSol. */
+  public ChangeSol() {}
 
   // Called when the command is initially scheduled.
   @Override
@@ -21,8 +18,8 @@ public class DoCompress extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Compress.getInstance().turnOn();
-    SmartDashboard.putBoolean("doComp", true);
+    Solonoid.getInstance().change();
+    //Solonoid.getInstance().change(Solonoid.getInstance().isFwd() ? Value.kReverse : Value.kForward);
   }
 
   // Called once the command ends or is interrupted.
@@ -32,6 +29,6 @@ public class DoCompress extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

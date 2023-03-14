@@ -4,12 +4,15 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import frc.robot.auto.actions.AutoDrive;
+import frc.robot.auto.actions.NEO;
+import frc.robot.auto.actions.ArmPos;
 
-public class Falseify extends CommandBase {
-  /** Creates a new Falseify. */
-  public Falseify() {
+public class HumanPlayer extends CommandBase {
+  /** Creates a new MidScore. */
+  public HumanPlayer() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -20,8 +23,16 @@ public class Falseify extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.putBoolean("doComp", false);
-    SmartDashboard.putBoolean("doUnComp", false);
+
+    //should be the same as the mid score except move the NEO to a different height
+
+    new ParallelCommandGroup(
+        new NEO(),
+        new AutoDrive(1),
+        new ArmPos(),
+        new AutoDrive(-1),
+        new NEO()
+      );
   }
 
   // Called once the command ends or is interrupted.

@@ -4,13 +4,14 @@
 
 package frc.robot.commands;
 
-//Command to make the Pneumatic arm go back down 
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Solonoid;
-public class Forward extends CommandBase {
-  /** Creates a new Forward. */
-  public Forward() {
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import frc.robot.auto.actions.AutoDrive;
+import frc.robot.auto.actions.ArmPos;
+
+public class LowScore extends CommandBase {
+  /** Creates a new LowScore. */
+  public LowScore() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -21,7 +22,13 @@ public class Forward extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Solonoid.getInstance().forward();
+
+    new ParallelCommandGroup(
+        new AutoDrive(1),
+        new ArmPos(),
+        new AutoDrive(-1)
+      );
+
   }
 
   // Called once the command ends or is interrupted.

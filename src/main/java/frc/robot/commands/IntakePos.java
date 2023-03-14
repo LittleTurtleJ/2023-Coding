@@ -5,16 +5,18 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.OI;
-import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Intake;
 
-public class MoveArm extends CommandBase {
-  double speed;
+public class IntakePos extends CommandBase {
+  /** Creates a new IntakePos. */
 
-  /** Creates a new MoveArm. */
-  public MoveArm(Arm subsystem, double speedd) {
-    addRequirements(subsystem);
-    speed = speedd;
+
+  double posSpeed;
+  
+  public IntakePos(double posSpeed) {
+    // Use addRequirements() here to declare subsystem dependencies.
+
+    this.posSpeed = posSpeed;
   }
 
   // Called when the command is initially scheduled.
@@ -24,13 +26,16 @@ public class MoveArm extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Arm.getInstance().moveArm(speed);
+
+    Intake.getInstance().posSpin(posSpeed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Arm.getInstance().moveArm(0);
+
+    Intake.getInstance().posSpin(0);
+
   }
 
   // Returns true when the command should end.

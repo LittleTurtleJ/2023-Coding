@@ -5,32 +5,52 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import frc.robot.Constants;
+
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
  
 public class Arm extends SubsystemBase {
-  private static final int ARM_MOTOR_PORT = 0;
   private static Arm arm;
 
+  private CANSparkMax motor;
 
-  /** Creates a new Arm. */
   public Arm() {
+    motor = new CANSparkMax(Constants.Arm.ARM_PORT, MotorType.kBrushless);
     
-  }
-  
-  private  WPI_TalonFX armMotor= new WPI_TalonFX(ARM_MOTOR_PORT);
-
-  public void moveArm(double speed) {
-    armMotor.set(speed);
+    // applyChanges();
+    changes();
   }
   
   @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+  public void periodic() {}
+
+  public void moveArm(double speed) {
+    motor.set(speed);
   }
+
+  public RelativeEncoder getEncoder() {
+    return motor.getEncoder();
+  }
+
+  private void applyChanges() {
+    motor.enableSoftLimit(SoftLimitDirection.kForward, true);
+    motor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+
+    motor.setSoftLimit(SoftLimitDirection.kForward, Constants.Arm.UPPER_LIMIT);
+    motor.setSoftLimit(SoftLimitDirection.kReverse, Constants.Arm.LOWER_LIMIT);
+  }
+
+  private void changes() {
+    motor.enableSoftLimit(SoftLimitDirection.kForward, false);
+    motor.enableSoftLimit(SoftLimitDirection.kReverse, false);
+  }
+
   public static Arm getInstance(){
-    if(arm == null){
-      arm = new Arm();
-    }
+    if(arm == null) arm = new Arm();
     return arm;
   }
 }

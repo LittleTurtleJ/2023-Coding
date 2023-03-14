@@ -4,9 +4,12 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.auto.AutoPicker;
+import frc.robot.auto.actions.Test;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,9 +22,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * project.
  */
 public class Robot extends TimedRobot {
+  private boolean hi = false;
+
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
+
+  private AutoPicker autoPicker = new AutoPicker();
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -32,7 +39,12 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     CommandScheduler.getInstance().setDefaultCommand(DriveTrain.getInstance(), new Drive(DriveTrain.getInstance()));
+    CommandScheduler.getInstance().schedule(new Test());
+    // Compress.getInstance().change(Constants.Temp.COMPRESS);
+    autoPicker.update();
     m_robotContainer = new RobotContainer();
+
+    CameraServer.startAutomaticCapture();
   }
 
   /**
@@ -52,12 +64,15 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putNumber("Right Leader", DriveTrain.getInstance().getRLeader().getSelectedSensorPosition());
     SmartDashboard.putNumber("Left Leader", DriveTrain.getInstance().getLLeader().getSelectedSensorPosition());
-  
+    autoPicker.outputToSmartDashboard();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    autoPicker.reset();
+    autoPicker.update();
+  }
 
   @Override
   public void disabledPeriodic() {}
@@ -83,6 +98,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    // new Test();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }

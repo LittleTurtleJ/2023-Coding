@@ -4,21 +4,12 @@
 //If you are reading this congratulations on finding the secret easter egg
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
-import frc.robot.commands.Backward;
-import frc.robot.commands.DoCompress;
-import frc.robot.commands.Drive;
-import frc.robot.commands.Falseify;
-import frc.robot.commands.Forward;
-import frc.robot.subsystems.DriveTrain;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.MoveArm;
-import frc.robot.commands.TurnOffComp;
-import frc.robot.OI;
+import frc.robot.auto.actions.Test;
+import frc.robot.commands.*;
+import frc.robot.subsystems.Arduino;
+import frc.robot.subsystems.Arm;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -28,7 +19,7 @@ import frc.robot.OI;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final DriveTrain autoSDriveTrain = DriveTrain.getInstance();
+  // private final DriveTrain autoSDriveTrain = DriveTrain.getInstance();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   // private final CommandXboxController m_driverController =
@@ -59,16 +50,33 @@ public class RobotContainer {
     // cancelling on release.
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
 
-    // OI.getInstance().getController().a().whileTrue(new MoveArm(0.5));
-    OI.getInstance().getController().a().whileTrue(new DoCompress());
-    OI.getInstance().getController().b().whileTrue(new TurnOffComp());
-    OI.getInstance().getController().x().whileTrue(new Backward());
-    OI.getInstance().getController().y().whileTrue(new Forward());
-    OI.getInstance().getController().leftBumper().whileTrue(new Falseify());
+    OI.getInstance().getController().a().whileTrue(new MoveArm(Arm.getInstance(), .2));
+    OI.getInstance().getController().b().whileTrue(new MoveArm(Arm.getInstance(), -.2));
+    OI.getInstance().getController().leftBumper().whileTrue(new MoveArm(Arm.getInstance(), 0));
 
-    //OI.getInstance().getController().x().whileTrue(new SelfTest());
+    OI.getInstance().getController().povRight().whileTrue();
+
+
+    // OI.getInstance().getController().rightBumper().whileTrue(new Test());
+
+    // OI.getInstance().getController().x().whileTrue(new UseGyro());
+    // OI.getInstance().getController().y().whileTrue(new Test());
+
+    //  OI.getInstance().getController().a().whileTrue(new Balance());
+    //  OI.getInstance().getController().b().whileTrue(new LowScore());
+    //  OI.getInstance().getController().x().whileTrue(new MidScore());
+    //  OI.getInstance().getController().y().whileTrue(new HumanPlayer());
+
+    // OI.getInstance().getController().x().whileTrue(new AutoDrive());
+
+    OI.getInstance().getController().leftBumper().whileTrue(new IntakeSpin(Constants.Intake.INTAKE_SPEED));
+    OI.getInstance().getController().rightBumper().whileTrue(new IntakeSpin(-Constants.Intake.INTAKE_SPEED));
+    // OI.getInstance().getController().a().whileTrue(new Fancy());
+
+    OI.getInstance().getController().x().whileTrue(new IntakePos(Constants.Intake.POS_INTAKE_SPEED));
+    OI.getInstance().getController().y().whileTrue(new IntakePos(-Constants.Intake.POS_INTAKE_SPEED));
+
   }
-
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -77,10 +85,6 @@ public class RobotContainer {
    */
   // public Command getAutonomousCommand() {
   //   // An example command will be run in autonomous
-  //   return Autos.exampleAuto(m_exampleSubsystem);
+  //   return AutoDrive.();
   // }
-
-  
 }
-
-

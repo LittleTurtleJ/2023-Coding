@@ -5,16 +5,15 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.OI;
-import frc.robot.subsystems.Arm;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import frc.robot.auto.actions.AutoDrive;
+import frc.robot.auto.actions.NEO;
+import frc.robot.auto.actions.ArmPos;
 
-public class MoveArm extends CommandBase {
-  double speed;
-
-  /** Creates a new MoveArm. */
-  public MoveArm(Arm subsystem, double speedd) {
-    addRequirements(subsystem);
-    speed = speedd;
+public class MidScore extends CommandBase {
+  /** Creates a new MidScore. */
+  public MidScore() {
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
@@ -24,14 +23,19 @@ public class MoveArm extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Arm.getInstance().moveArm(speed);
+
+    new ParallelCommandGroup(
+        new NEO(),
+        new AutoDrive(1),
+        new ArmPos(),
+        new AutoDrive(-1),
+        new NEO()
+      );
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    Arm.getInstance().moveArm(0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
